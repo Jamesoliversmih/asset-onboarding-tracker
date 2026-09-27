@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+body {
+  background-color: #f7f8fa;
+  color: #141821;
+}
+
+:focus-visible {
+  outline: 2px solid #3452b4;
+  outline-offset: 2px;
+}
+
+table {
+  border-collapse: collapse;
+}

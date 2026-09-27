@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EmployeeStatus {
+  ONBOARDING
+  ACTIVE
+  OFFBOARDING
+  OFFBOARDED
+}
+
+enum AssetType {
+  LAPTOP
+  MONITOR
+  PHONE
+  LICENSE
+  OTHER
+}
+
+enum AssetStatus {
+  AVAILABLE
+  ASSIGNED
+  RETIRED
+}
+
+enum TaskPhase {
+  ONBOARDING
+  OFFBOARDING
+}
+
+model Employee {
+  id          String         @id @default(cuid())
+  name        String
+  email       String         @unique
+  role        String
+  department  String
+  status      EmployeeStatus @default(ONBOARDING)
+  startDate   DateTime       @default(now())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  assets      Asset[]
+  tasks       Task[]
+}
+
+model Asset {
+  id           String      @id @default(cuid())
+  name         String
+  type         AssetType
+  serialNumber String?
+  status       AssetStatus @default(AVAILABLE)
+  assignedTo   Employee?   @relation(fields: [employeeId], references: [id])
+  employeeId   String?
+  createdAt    DateTime    @default(now())
+}
+
+model Task {
+  id         String    @id @default(cuid())
+  label      String
+  phase      TaskPhase
+  done       Boolean   @default(false)
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId String
+  createdAt  DateTime  @default(now())
+}
